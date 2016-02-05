@@ -1,26 +1,52 @@
-# Ember-cli-platforms
-
-This README outlines the details of collaborating on this Ember addon.
+Ember-cli-platforms
+===================
 
 ## Installation
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+- `ember install ember-cli-platforms`
+- `ember install ember-cli-platform-cordova`
 
-## Running
+## Api
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+- `ember s -p "cordova"`
+- `ember s --platform="cordova"`
+- `ember platform cordova`
 
-## Running Tests
+## Pipeline Configuration
 
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+- `<project>/config/platforms/<platform>.js`
 
-## Building
+**Minimum Settings**
+- `outputDestination`
+- `addon-name`
+- `commands: [...commands]` (for command proxying)
 
-* `ember build`
+## Pipeline Hooks
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+Borrowed heavily from ember-cli-deploy
+
+- configure
+- setup
+- willPipeAssets
+- pipeAssets
+- didPipeAssets
+- teardown
+
+## Remote Live Reload and Inspection
+
+- [ember-cli-remote-inspector](https://github.com/joostdevries/ember-cli-remote-inspector)
+- ember-cli-remote-livereload
+  - auto add `<allow-navigation href="http://10.0.2.2:4200/*" />`
+  - cordova.liveReload.enabled = true
+  - cordova.liveReload.platform = 'android'
+  - cordova.emberUrl
+  - PR https://github.com/poetic/ember-cli-cordova/pull/56
+  
+
+
+## Pipeline and Deployment Addons
+
+Addons implementing this pipeline should also implement
+a deployment pipeline for ember-cli-deploy
+
+- ember-cli-platform-cordova
