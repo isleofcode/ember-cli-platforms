@@ -1,6 +1,15 @@
 Ember-cli-platforms
 ===================
 
+# Evolving Proposal
+
+This addon is currently just a proposal (not implemented) and is becoming an RFC.
+You can track the RFC here: https://github.com/ember-cli/rfcs/pull/35
+
+
+
+----
+
 Powerful workflow and build pipeline for cross-platform Ember CLI Applications.
 
 `ember-cli-platforms` treats platforms as build targets, and gives you a powerful
