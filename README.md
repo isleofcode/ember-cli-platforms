@@ -32,6 +32,14 @@ own addons.
 - [Crosswalk]() `ember install ember-cli-platform-crosswalk`
 - [Chrome]() `ember install ember-cli-platform-chrome`
 - [Firefox]() `ember install ember-cli-platform-firefox`
+- [MacGap]() `ember install ember-cli-platform-macgap`
+- [CEF]() `ember install ember-cli-platform-cef`
+
+**Advanced Usage**
+
+The following plugins are available for advanced user. These platforms
+come with [security risks]() you should understand before you choose them.
+
 - [Electron]() `ember install ember-cli-platform-electron`
 - [NW.js]() `ember install ember-cli-platform-nwjs`
 
@@ -49,25 +57,40 @@ ember platform <type> [-t "<name>"]
 Generates a new platform of `<type>` with an optional `<name>` parameter used when more than
 one instance of a platform is desired.
 
+For all commands, `platform` can be abbreviated as `p`, and
+commands that mirror `ember-cli` commands preserve the `ember-cli`
+shorthands for those methods as well.
+
 **Serve a specific platform.**
 ```cli
-ember s -p "<type>[-<name>]"
+ember p:s <type>[-<name>]
 ```
 
 This is shorthand for:
 ```cli
-ember serve --platform="<type>" [--target="<name>"]
+ember platform:serve --platform="<type>" [--target="<name>"] --environment="development"
 ```
 
 **Build a specific platform.**
 ```cli
-ember b -p "<type>[-<name>]"
+ember p:b <type>[-<name>]
+```
+
+**Test a specific platform.**
+```cli
+ember p:t <type>[-<name>] <deployTarget>
 ```
 
 **Deploy a specific platform.**
 ```cli
-ember deploy:platform -p "<type>[-<name>]"
+ember p:d <type>[-<name>] <deployTarget>
 ```
+
+This is short hand for:
+```cli
+ember platform:deploy --platform="<type>" [--target="<name>"] --deployTarget="<deployTarget>" --environment="development"
+```
+
 
 ### Platform Specific Code
 
@@ -235,10 +258,35 @@ Platform plugins have several concerns they need to manage.  They should
 - run any necessary SDK installation commands
 - handle SDK specific file inclusion
 
+**Command Runners**
+
+- ember-cli-platform supplied a commandRunner you can use to run CLI commands directly from
+  the pipeline if necessary.
+
+**Command Proxies**
+
+- If your ember-cli-platform-plugin specifies a `commandName`, it will be used to generate
+ a command proxy for that platform.  For instance:
+ 
+```cli
+{
+  commandName: 'cordova'
+}
+```
+
+If a user generates a cordova platform with the following command
+
+```cli
+ember platform cordova -t "ios"
+```
+
+Then an `npm` command script will be generated and installed that proxies use of
+`cordova-ios` into the cordova project directory ios, allowing you to easily use
+the cordova-cli.
+
 **Minimum Settings**
 - `outputDestination`
 - `addon-name`
-- `commands: [...commands]` (for command proxying)
 
 
 
@@ -280,6 +328,19 @@ Yes. There's a project specifically for that: [ember-cli-remote-inspector](https
 [Suggested Addons]()
 
 
+**Challenge List (unresolved implementation questions)**
+
+The following concerns are difficult challenges that will need to be fleshed out to properly provide
+an abstract process for each platform to be able to utilize.
+
+- ember serve doesn't resolve promise when serving, nw.js had to hook it
+- testing: run tests within the deployment target
+  - view based tests
+  - special test runner
+  - special qunit adapter for testem
+  - special test command
+- testing: run tests for each platform on travis/circle/etc.
+- a way to configure `environment.js` if needed (beyond the platform config file, probably just a merge)
 
 ## Wish List
 
